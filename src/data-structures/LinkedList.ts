@@ -151,7 +151,7 @@ class LinkedList {
   }
 
   remove(index: number): ListNode | undefined | null {
-    if (index < 0 || index > this._size) return undefined;
+    if (index < 0 || index >= this._size) return undefined;
     if (index === 0) return this.shift();
     if (index === this._size - 1) return this.pop();
 
