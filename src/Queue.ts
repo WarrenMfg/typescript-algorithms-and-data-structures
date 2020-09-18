@@ -13,8 +13,6 @@ class Queue {
   private _tail = 0;
   private _queue: IQueue = {};
 
-  constructor() {}
-
   enqueue(person: Person): boolean {
     this._queue[this._tail] = person;
     this._tail++;
