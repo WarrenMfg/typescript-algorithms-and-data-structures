@@ -140,19 +140,19 @@ class LRUCache {
 
     this._limit = limit;
 
-    while (this.full()) {
-      this.prune();
+    while (this._full()) {
+      this._prune();
       if (this._size === 0) break;
     }
 
     return true;
   }
 
-  private full(): boolean {
+  private _full(): boolean {
     return this._size >= this._limit;
   }
 
-  private prune(): void {
+  private _prune(): void {
     const popped = this._dll.pop();
     if (popped) {
       delete this._items[popped.value.key];
@@ -166,9 +166,9 @@ class LRUCache {
     if (this._items.hasOwnProperty(key)) {
       cacheItem = this._items[key];
       cacheItem.value = value;
-      this.promote(cacheItem.dllNode!);
+      this._promote(cacheItem.dllNode!);
     } else {
-      if (this.full()) this.prune();
+      if (this._full()) this._prune();
 
       cacheItem = new LRUCacheItem(key, value);
       cacheItem.dllNode = this._dll.unshift(cacheItem); // ✅ returns entire head object; references same object regardless of new head
@@ -181,11 +181,11 @@ class LRUCache {
     if (!this._items.hasOwnProperty(key)) return null;
 
     const LRUCacheItem = this._items[key];
-    this.promote(LRUCacheItem.dllNode!); // ✅ key, value, dllNode (dll head)
+    this._promote(LRUCacheItem.dllNode!); // ✅ key, value, dllNode (dll head)
     return LRUCacheItem.value;
   }
 
-  private promote(dllNode: DLLNode): void {
+  private _promote(dllNode: DLLNode): void {
     this._dll.moveToFront(dllNode);
   }
 }
