@@ -1,10 +1,10 @@
-interface DLLNode {
-  value: number;
+export interface DLLNode {
+  value: any;
   next: DLLNode | null;
   prev: DLLNode | null;
 }
 
-class DoublyLinkedList {
+export class DoublyLinkedList {
   private _head: DLLNode | null;
   private _tail: DLLNode | null;
   private _size: number = 0;
@@ -19,7 +19,7 @@ class DoublyLinkedList {
     this._size++;
   }
 
-  push(value: number): number {
+  push(value: any): number {
     const node: DLLNode = {
       value,
       next: null,
@@ -74,7 +74,7 @@ class DoublyLinkedList {
     return shifted;
   }
 
-  unshift(value: number): number {
+  unshift(value: any): number {
     const node: DLLNode = {
       value,
       next: this._head,
@@ -117,7 +117,7 @@ class DoublyLinkedList {
     return nodeWanted ? pointer : pointer!.value;
   }
 
-  set(index: number, value: number): boolean {
+  set(index: number, value: any): boolean {
     const node = this.get(index);
     if (node && typeof node === 'object') {
       node.value = value;
@@ -127,7 +127,7 @@ class DoublyLinkedList {
     }
   }
 
-  insert(index: number, value: number): number | undefined | boolean {
+  insert(index: number, value: any): number | undefined | boolean {
     if (index < 0 || index > this._size) return undefined;
     if (index === 0) return this.unshift(value);
     if (index === this._size) return this.push(value);
