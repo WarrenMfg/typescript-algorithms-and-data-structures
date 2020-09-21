@@ -23,31 +23,31 @@ class DLLNode {
 
 // ⚪️ Doubly Linked List
 class DLL {
-  private _head: any = null;
-  private _tail: any = null;
+  public head: any = null;
+  public tail: any = null;
 
   unshift(LRUCacheItem: LRUCacheItem): DLLNode {
-    const newNode = new DLLNode(null, LRUCacheItem, this._head);
+    const newNode = new DLLNode(null, LRUCacheItem, this.head);
 
-    if (!this._head) {
-      this._head = this._tail = newNode;
+    if (!this.head) {
+      this.head = this.tail = newNode;
     } else {
-      this._head.prev = newNode;
-      this._head = newNode;
+      this.head.prev = newNode;
+      this.head = newNode;
     }
 
-    return this._head;
+    return this.head;
   }
 
   shift(): DLLNode | null {
-    if (!this._head) return null;
+    if (!this.head) return null;
 
-    const shifted = this._head;
-    if (this._head === this._tail) {
-      this._head = this._tail = null;
+    const shifted = this.head;
+    if (this.head === this.tail) {
+      this.head = this.tail = null;
     } else {
-      this._head = shifted.next;
-      this._head.prev = null;
+      this.head = shifted.next;
+      this.head.prev = null;
       shifted.sanitize();
     }
 
@@ -55,27 +55,27 @@ class DLL {
   }
 
   push(LRUCacheItem: LRUCacheItem): DLLNode {
-    const newNode = new DLLNode(this._tail, LRUCacheItem, null);
+    const newNode = new DLLNode(this.tail, LRUCacheItem, null);
 
-    if (!this._tail) {
-      this._head = this._tail = newNode;
+    if (!this.tail) {
+      this.head = this.tail = newNode;
     } else {
-      this._tail.next = newNode;
-      this._tail = newNode;
+      this.tail.next = newNode;
+      this.tail = newNode;
     }
 
-    return this._tail;
+    return this.tail;
   }
 
   pop(): DLLNode | null {
-    if (!this._tail) return null;
+    if (!this.tail) return null;
 
-    const popped = this._tail;
-    if (this._head === this._tail) {
-      this._head = this._tail = null;
+    const popped = this.tail;
+    if (this.head === this.tail) {
+      this.head = this.tail = null;
     } else {
-      this._tail = popped.prev;
-      this._tail.next = null;
+      this.tail = popped.prev;
+      this.tail.next = null;
       popped.sanitize();
     }
 
@@ -83,23 +83,22 @@ class DLL {
   }
 
   moveToFront(node: DLLNode): void {
-    if (node === this._tail) {
-      this.pop(); // in the case that this._tail === this._head, both are now null
-    } else if (node === this._head) {
+    if (node === this.tail) {
+      this.pop(); // in the case that this.tail === this.head, both are now null
+    } else if (node === this.head) {
       return;
     } else {
       node.delete();
     }
 
-    // reset because may not have entered if/else statement
-    node.prev = node.next = null;
+    node.sanitize();
 
-    if (!this._head) {
-      this._head = this._tail = node;
+    if (!this.head) {
+      this.head = this.tail = node;
     } else {
-      this._head.prev = node;
-      node.next = this._head;
-      this._head = node;
+      this.head.prev = node;
+      node.next = this.head;
+      this.head = node;
     }
   }
 }
@@ -107,7 +106,7 @@ class DLL {
 // ⚪️ Least Recently Used Cache Item
 class LRUCacheItem {
   public dllNode: DLLNode | null = null;
-  constructor(public key: string, public value: any) {
+  constructor(public key: number, public value: any) {
     this.key = key; // ✅ actual user input
     this.value = value; // ✅ actual user input
   }
@@ -160,7 +159,7 @@ class LRUCache {
     }
   }
 
-  set(key: string, value: any): void {
+  set(key: number, value: any): void {
     let cacheItem: LRUCacheItem;
 
     if (this._items.hasOwnProperty(key)) {
@@ -180,12 +179,16 @@ class LRUCache {
   get(key: string): any | null {
     if (!this._items.hasOwnProperty(key)) return null;
 
-    const LRUCacheItem = this._items[key];
-    this._promote(LRUCacheItem.dllNode!); // ✅ key, value, dllNode (dll head)
-    return LRUCacheItem.value;
+    const cacheItem = this._items[key];
+    this._promote(cacheItem.dllNode!); // ✅ key, value, dllNode (dll head)
+    return cacheItem.value;
   }
 
   private _promote(dllNode: DLLNode): void {
     this._dll.moveToFront(dllNode);
+  }
+
+  getDLL(): DLLNode {
+    return this._dll.head;
   }
 }
