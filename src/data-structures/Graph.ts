@@ -58,4 +58,46 @@ class Graph {
     delete this._adjacencyList[vertex];
     return true;
   }
+
+  dfs(start: string): string[] {
+    if (!this._adjacencyList.hasOwnProperty(start)) return [];
+
+    const result: string[] = [];
+    const visited: { [key: string]: boolean } = {};
+
+    const recurse = (v: string) => {
+      if (visited[v]) return;
+      result.push(v);
+      visited[v] = true;
+
+      const adjacentVertices = this._adjacencyList[v];
+      for (let i = 0; i < adjacentVertices.length; i++) {
+        recurse(adjacentVertices[i]);
+      }
+    };
+
+    recurse(start);
+    return result;
+  }
+
+  dfsFilter(start: string, filter: (v: string) => any): string[] {
+    if (!this._adjacencyList.hasOwnProperty(start)) return [];
+
+    const result: string[] = [];
+    const visited: { [key: string]: boolean } = {};
+
+    const recurse = (v: string) => {
+      if (visited[v]) return;
+      if (filter(v)) result.push(v);
+      visited[v] = true;
+
+      const adjacentVertices = this._adjacencyList[v];
+      for (let i = 0; i < adjacentVertices.length; i++) {
+        recurse(adjacentVertices[i]);
+      }
+    };
+
+    recurse(start);
+    return result;
+  }
 }
