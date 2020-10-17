@@ -80,6 +80,27 @@ class Graph {
     return result;
   }
 
+  dfsIterative(start: string): string[] {
+    if (!this._adjacencyList.hasOwnProperty(start)) return [];
+
+    const result: string[] = [];
+    const visited: { [key: string]: boolean } = {};
+    let stack = [start];
+    let vertex: string;
+
+    while (stack.length) {
+      vertex = stack.pop() as string;
+      if (visited[vertex]) continue;
+
+      result.push(vertex);
+      visited[vertex] = true;
+
+      stack = [...stack, ...this._adjacencyList[vertex]];
+    }
+
+    return result;
+  }
+
   dfsFilter(start: string, filter: (v: string) => any): string[] {
     if (!this._adjacencyList.hasOwnProperty(start)) return [];
 
