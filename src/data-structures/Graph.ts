@@ -122,8 +122,8 @@ class Graph {
     return result;
   }
 
-  bfs(start: string): string[] | boolean {
-    if (!this._adjacencyList.hasOwnProperty(start)) return false;
+  bfs(start: string): string[] {
+    if (!this._adjacencyList.hasOwnProperty(start)) return [];
 
     const result: string[] = [start];
     // can use a queue here
