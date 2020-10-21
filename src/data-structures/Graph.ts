@@ -121,4 +121,50 @@ class Graph {
     recurse(start);
     return result;
   }
+
+  bfs(start: string): string[] | boolean {
+    if (!this._adjacencyList.hasOwnProperty(start)) return false;
+
+    const result: string[] = [start];
+    // can use a queue here
+    let queue: string[] = [...this._adjacencyList[start]];
+    let i = 0;
+    const visited: { [key: string]: boolean } = {
+      [start]: true
+    };
+    let child: string;
+
+    while (i < queue.length) {
+      child = queue[i];
+      if (visited[child]) {
+        i++;
+        continue;
+      } else {
+        visited[child] = true;
+        result.push(child);
+        queue = [...queue, ...this._adjacencyList[child]];
+        i++;
+      }
+    }
+
+    return result;
+  }
 }
+
+const g = new Graph();
+g.addVertex('A');
+g.addVertex('B');
+g.addVertex('C');
+g.addVertex('D');
+g.addVertex('E');
+g.addVertex('F');
+
+g.addEdge('A', 'B');
+g.addEdge('A', 'C');
+g.addEdge('B', 'D');
+g.addEdge('C', 'E');
+g.addEdge('D', 'E');
+g.addEdge('D', 'F');
+g.addEdge('E', 'F');
+
+console.log(g.bfs('3'));
