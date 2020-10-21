@@ -101,7 +101,7 @@ class Graph {
     return result;
   }
 
-  dfsFilter(start: string, filter: (v: string) => any): string[] {
+  dfsFilter(start: string, filter: (v: string) => boolean): string[] {
     if (!this._adjacencyList.hasOwnProperty(start)) return [];
 
     const result: string[] = [];
