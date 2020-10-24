@@ -1,16 +1,16 @@
-interface IPriorityQueue {
+export interface IPriorityQueueNode {
   value: any;
   priority: number;
   insertionTime: number;
 }
 
-class PriorityQueue {
-  private _values: IPriorityQueue[];
+export class PriorityQueue {
+  private _values: IPriorityQueueNode[];
   constructor() {
     this._values = [];
   }
 
-  _createNewNode(value: any, priority: number): IPriorityQueue {
+  _createNewNode(value: any, priority: number): IPriorityQueueNode {
     return {
       value,
       priority,
@@ -75,11 +75,11 @@ class PriorityQueue {
     return this._values.length;
   }
 
-  dequeue(): IPriorityQueue | undefined {
+  dequeue(): IPriorityQueueNode | undefined {
     if (this._values.length <= 1) return this._values.pop();
 
     const priority = this._values[0];
-    this._values[0] = this._values.pop() as IPriorityQueue;
+    this._values[0] = this._values.pop() as IPriorityQueueNode;
 
     let parentIndex = 0;
 
